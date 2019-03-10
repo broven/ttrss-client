@@ -6,14 +6,21 @@
   "author": "metajs <zycode277@gmail.com>",
   "scripts": {
     "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "dev": "tsc -w"
+    "test": "ts-jest",
+    "doc": "typedoc --out docs src/index.ts",
+    "dev": "tsc -w & jest --watch --coverage"
   },
   "dependencies": {
     "axios": "^0.18.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/jest": "^24.0.9",
+    "dotenv": "^6.2.0",
+    "jest": "^24.3.1",
+    "ts-jest": "^24.0.0",
     "tslint": "^5.13.1",
+    "typedoc": "^0.14.2",
     "typescript": "^3.3.3333"
   }
 }
