@@ -1,6 +1,6 @@
 import axios, { AxiosStatic } from 'axios';
 
-import TTRss from '../src/index';
+import TTRss from '../../src/index';
 
 jest.mock("axios");
 

@@ -316,6 +316,13 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/dotenv@^6.1.0":
+  version "6.1.0"
+  resolved "http://registry.npm.taobao.org/@types/dotenv/download/@types/dotenv-6.1.0.tgz#fba2bfd1f28a46eadaa049f3313ebb89bdedfc53"
+  integrity sha1-+6K/0fKKRuraoEnzMT67ib3t/FM=
+  dependencies:
+    "@types/node" "*"
+
 "@types/events@*":
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/@types/events/download/@types/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
