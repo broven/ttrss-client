@@ -1,4 +1,4 @@
-const base = require('./jest.base');
+const base = require('./jest.config');
 module.exports = {
     ...base,
     testPathIgnorePatterns: [
