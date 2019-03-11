@@ -25,4 +25,14 @@ describe("basic test", () => {
         expect(result).not.toBeUndefined;
         expect(result).toBeTruthy();
     });
+    test("login failed", async () => {
+        const ttrss = new TTRSS({
+            serverUrl: process.env[requiredParams[2]]
+        });
+        const result = await ttrss.login(
+            'asdfadsfasf',
+            'asdfsdafsadfsdaf'
+        );
+        expect(result).toBeFalsy();
+    });
 });
