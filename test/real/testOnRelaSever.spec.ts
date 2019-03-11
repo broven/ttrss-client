@@ -1,12 +1,28 @@
-import * as dotenv from 'dotenv';
+import TTRSS from '../../src/index';
 
+const dotenv = require("dotenv");
 dotenv.config();
 const requiredParams = [
     "TT_PASSWORD",
     "TT_USER",
     "TTRSS_SERVER"
 ];
-const isSatifyed = requiredParams.every((item) => {
-    if (process.env[item]) return true;
-    return false;
+
+describe("basic test", () => {
+    test("env config", () => {
+        requiredParams.forEach((item) => {
+            expect(process.env[item]).not.toBeUndefined;
+        });
+    });
+    test("login", async () => {
+        const ttrss = new TTRSS({
+            serverUrl: process.env[requiredParams[2]]
+        });
+        const result = await ttrss.login(
+            process.env[requiredParams[1]],
+            process.env[requiredParams[0]]
+        );
+        expect(result).not.toBeUndefined;
+        expect((<any>result).content).toHaveProperty("session_id");
+    });
 });

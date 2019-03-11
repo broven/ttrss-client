@@ -5,9 +5,11 @@ interface Ioption {
     serverUrl: string;
     timeout?: number;
 }
+enum eOperation {
+    "login"
+}
 
-
-const debug = (log: string) => {console.log(log); };
+const debug = (log: string) => { process.env.DEBUG && console.log(log); };
 /**
  * Tiny tiny rss client class
  */
@@ -35,31 +37,33 @@ export default class TtrssClient {
         return await this._login();
     }
     private async _login() {
-        const result = await this.sendRequest({
+        debug(`__login...`);
+        const result = await this.sendRequest("login", {
             user: this.userInfo.user,
-            password: this.userInfo,
+            password: this.userInfo.password,
         }, false);
-        debug(JSON.stringify(result));
         return result;
     }
     public getVersion() {
     }
-    private async sendRequest(operation: string, data: object, needLogin = true): Promise<object> {
+    private async sendRequest(operation: keyof typeof eOperation, data: object, needLogin = true): Promise<object> {
         // FIXME: '/' at the url end
+        Object.assign(data, {op: operation});
         if (needLogin) {
             if (this.sessionId) {
                 Object.assign(data, {session_id: this.sessionId});
             } else {
                 debug("in to the request login hell");
                 await this._login();
-                return await this.sendRequest(data, needLogin);
+                return await this.sendRequest(operation, data, needLogin);
             }
         }
-        debug("senn request.");
+        debug(`send request: ${JSON.stringify(data)}`);
         try {
             const res = await axios.post(this.serverUrl + "/api/", data, {timeout: this.timeout});
-        return res.data;
+            return res.data;
         } catch (e) {
+            console.error("error occurred when ttrss client send request");
             throw new Error(e);
         }
     }

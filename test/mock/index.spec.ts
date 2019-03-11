@@ -12,8 +12,9 @@ test("default export should not be undefined", () => {
 describe("login", () => {
 test("login", async () => {
     (<jest.Mock>axios.post).mockImplementation((url, data, option) => {
-        expect(data).toContain({op: "login", user: "user", password: "admin"});
-        Promise.resolve({data: {"session_id": "xxx"}});
+            console.log("In mock axios post");
+        expect(data).toEqual({op: "login", user: "user", password: "admin"});
+        return Promise.resolve({data: {"session_id": "xxx"}});
     });
     const ttrss = new TTRss({
             serverUrl: "127.0.0.1"
