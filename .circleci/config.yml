@@ -6,22 +6,22 @@ jobs: # a collection of steps
     steps: # a collection of executable commands
       - checkout
       - restore_cache:
-              name: Restore Yarn Package Cache
-              keys:
-                - yarn-packages-{{ checksum "yarn.lock" }}
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
-              name: Install Dependencies
-              command: yarn install --frozen-lockfile
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
       - save_cache:
-        name: Save Yarn Package Cache
-        key: yarn-packages-{{ checksum "yarn.lock" }}
-        paths:
-          - ~/.cache/yarn
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
       - run:
           name: test
           command: yarn run test:ci
       - run:
-            name: "Run Jest and Collect Coverage Reports"
-            command:  yarn run test:cicov
+          name: "Run Jest and Collect Coverage Reports"
+          command:  yarn run test:cicov
       - store_artifacts:
           path: coverage
