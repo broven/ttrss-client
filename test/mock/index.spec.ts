@@ -14,12 +14,19 @@ test("login", async () => {
     (<jest.Mock>axios.post).mockImplementation((url, data, option) => {
             console.log("In mock axios post");
         expect(data).toEqual({op: "login", user: "user", password: "admin"});
-        return Promise.resolve({data: {"session_id": "xxx"}});
+        return Promise.resolve({data: {
+            "seq": 0,
+            "status": 0,
+            "content": {
+                "session_id": "j8modrj23e1n7qnepg0t3gcp2p",
+                "api_level": 14
+            }
+        }});
     });
     const ttrss = new TTRss({
             serverUrl: "127.0.0.1"
     });
     const res = await ttrss.login("user", "admin");
-    expect(res).toEqual({"session_id": "xxx"});
+    expect(res).toEqual(true);
 });
 });
