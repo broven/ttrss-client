@@ -8,6 +8,8 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "test": "jest --coverage",
     "test:mock": "jest --config jest.mock.config.js --coverage",
+    "test:ci": "jest --config jest.mock.config.js --ci",
+    "test:cicov":"jest --config jest.mock.config.js --coverage --ci",
     "doc": "typedoc --out docs src/index.ts",
     "dev": "tsc -w & jest --config jest.mock.config.js --watch --coverage"
   },
