@@ -14,6 +14,7 @@ interface Iresponse {
 }
 enum eOperation {
     "login",
+    "unsubscribeFeed",
     "getCategories"
 }
 
@@ -95,8 +96,24 @@ export default class TtrssClient {
     public getLabels() {}
     public setArticleLabel() {}
     public shareToPublished() {}
-    public subscribeToFeed() {}
-    public unsubscribeFeed() {}
+    /**
+     * subcribeFeed
+     * @description this api is a little different form the api,
+     *              the user and password are optional
+     *              if you login before, dont't need your username and password again.
+     * @param feed_url - as it is
+     * @param category_id - as it is
+     */
+    public subscribeToFeed(feed_url: string, category_id: string) {}
+
+    /**
+     * @param feed_id - Feed id to unsubscribe from
+     */
+    public async unsubscribeFeed(feed_id: string) {
+        return await this.sendRequest('unsubscribeFeed', {
+            feed_id
+        });
+    }
     public getFeedTree() {}
     private async sendRequest<T = object>(operation: keyof typeof eOperation, data: object, needLogin = true): Promise<T> {
         // FIXME: '/' at the url end
