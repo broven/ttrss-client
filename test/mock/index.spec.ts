@@ -12,7 +12,6 @@ test("default export should not be undefined", () => {
 describe("login", () => {
 test("login", async () => {
     (<jest.Mock>axios.post).mockImplementation((url, data, option) => {
-            console.log("In mock axios post");
         expect(data).toEqual({op: "login", user: "user", password: "admin"});
         return Promise.resolve({data: {
             "seq": 0,

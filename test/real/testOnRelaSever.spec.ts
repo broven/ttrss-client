@@ -1,4 +1,5 @@
 import TTRSS from '../../src/index';
+import { IgetCategories } from '../../typings/response';
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -36,3 +37,22 @@ describe("basic test", () => {
         expect(result).toBeFalsy();
     });
 });
+describe('apis', () => {
+    const ttrssInstance = new TTRSS({
+        serverUrl: process.env['TTRSS_SERVER']
+    });
+    beforeAll(async () => {
+        await ttrssInstance.login(
+            process.env[requiredParams[1]],
+            process.env[requiredParams[0]]
+        );
+    });
+    test('getCategories', async () => {
+        const res = await ttrssInstance.getCategories(false, true, true);
+        expect(res).toHaveProperty('length');
+        (<Array<object>>res).forEach(item => {
+            expect(item).toHaveProperty('id')
+            expect(item).toHaveProperty('title')
+        });
+    });
+})

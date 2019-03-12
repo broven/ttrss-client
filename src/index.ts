@@ -13,7 +13,8 @@ interface Iresponse {
     content: object;
 }
 enum eOperation {
-    "login"
+    "login",
+    "getCategories"
 }
 
 const debug = (log: string) => { process.env.DEBUG && console.log(log); };
@@ -45,14 +46,18 @@ export default class TtrssClient {
         debug(`login...`);
         this.userInfo.user = username;
         this.userInfo.password = password;
-        const {content: {session_id}} = await this._login();
+        const { session_id } = await this._login();
         this.sessionId = session_id
         if (this.sessionId) return true;
         return false;
     }
     private async _login() {
         debug(`__login...`);
-        const result = await this.sendRequest<resInterface.IloginSuccessRes>("login", {
+        if (!this.userInfo.user && !this.userInfo.password) {
+            console.error('please login before you use this API.');
+            throw new Error('can\'t login');
+        }
+        const result = await this.sendRequest<resInterface.Ilogin>("login", {
             user: this.userInfo.user,
             password: this.userInfo.password,
         }, false);
@@ -65,7 +70,21 @@ export default class TtrssClient {
     public getUnread() {}
     public getCounters() {}
     public getFeeds() {}
-    public getCategories() {}
+
+    /**
+     * Returns JSON-encoded list of categories with unread counts.
+     * @param unread_only - only return categories which have unread articles
+     * @param enable_nested - switch to nested mode, only returns topmost categories requires version:1.6.0
+     * @param include_empty  - include empty categories requires version:1.7.6
+     */
+    public async getCategories(unread_only: boolean, enable_nested: boolean, include_empty: boolean) {
+        const result = await this.sendRequest<resInterface.IgetCategories>("getCategories", {
+            unread_only,
+            enable_nested,
+            include_empty
+        });
+        return result;
+    }
     public getHeadlines() {}
     public updateArticle() {}
     public getArticle() {}
@@ -84,7 +103,7 @@ export default class TtrssClient {
         Object.assign(data, {op: operation});
         if (needLogin) {
             if (this.sessionId) {
-                Object.assign(data, {session_id: this.sessionId});
+                Object.assign(data, {sid: this.sessionId});
             } else {
                 debug("in to the request login hell");
                 await this._login();
@@ -94,7 +113,7 @@ export default class TtrssClient {
         debug(`send request: ${JSON.stringify(data)}`);
         try {
             const res = await axios.post(this.serverUrl + "/api/", data, {timeout: this.timeout});
-            return res.data;
+            return res.data.content;
         } catch (e) {
             console.error("error occurred when ttrss client send request");
             throw new Error(e);
