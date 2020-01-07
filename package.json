@@ -14,7 +14,7 @@
     "dev": "tsc -w & jest --config jest.mock.config.js --watch --coverage"
   },
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.19.1"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
